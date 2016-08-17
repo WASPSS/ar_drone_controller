@@ -6,16 +6,23 @@ from std_msgs.msg import String
 import numpy as np
 drift_y = 40
 drift_angle = 0.2
-kp_y = 0.00001
-kp_angle = -0.28
+kp_y = 0.0005
+kp_angle = 0.4
 
 def callback(data):
     twist = Twist()
+    '''
     if abs(data.linear.y) > drift_y and abs(data.angular.z) < drift_angle:
-        twist.angular.z = -0.14*np.sign(data.angular.z)#kp_angle*data.angular.z
-        twist.linear.y = 0.03*np.sign(data.linear.y)#kp_y*data.linear.ydata.angular.z
+        twist.angular.z = kp_angle*data.angular.z
+        twist.linear.y = kp_y*data.linear.y
     if abs(data.angular.z) > drift_angle:
-        twist.angular.z = -0.14*np.sign(data.angular.z)#kp_angle*data.angular.z
+        twist.angular.z = kp_angle*data.angular.z
+    '''
+
+    #twist.angular.z = kp_angle*np.sign(data.angular.z)#data.angular.z
+    #twist.linear.y = kp_y*np.sign(data.linear.y)
+    twist.angular.z = kp_angle*data.angular.z
+    twist.linear.y = kp_y*data.linear.y
     pub.publish(twist)
 
 # Intializes everything
